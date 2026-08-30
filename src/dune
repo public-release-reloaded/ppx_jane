@@ -6,8 +6,15 @@
    ppx_bin_prot ppx_custom_printf ppx_debug_assert
    ppx_disable_unused_warnings ppx_expect ppx_fields_conv ppx_fixed_literal
    ppx_here ppx_inline_test ppx_int63_literal ppx_let ppx_log
-   ppx_module_timer ppx_optional ppx_pipebang base_quickcheck.ppx_quickcheck
+   ppx_optional ppx_pipebang base_quickcheck.ppx_quickcheck
    ppx_sexp_message ppx_sexp_value ppx_shorthand ppx_stable
    ppx_stable_witness ppx_string ppx_string_conv ppx_template ppx_tydi
-   ppx_typed_fields ppx_typerep_conv ppx_var_name ppx_variants_conv)
+   ppx_typed_fields ppx_typerep_conv ppx_var_name ppx_variants_conv
+   ;; [ppx_module_timer] is an optional dependency: when its library is
+   ;; installed dune links it (via the [select] below), so it registers the
+   ;; module-timer transformation; when it is absent, ppx_jane still builds and
+   ;; simply omits module timing.  See [ppx_module_timer_select.*.ml].
+   (select ppx_module_timer_select.ml from
+     (ppx_module_timer -> ppx_module_timer_select.enabled.ml)
+     (-> ppx_module_timer_select.disabled.ml)))
  (preprocess no_preprocessing))
